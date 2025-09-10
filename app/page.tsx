@@ -793,7 +793,7 @@ export default function Home() {
             onClick={playerActions.previous}
             title="Previous Track"
           >
-            &lt;&lt;
+            <<
           </button>
           <button 
             className="control-btn play-pause"
@@ -815,7 +815,7 @@ export default function Home() {
             onClick={playerActions.next}
             title="Next Track"
           >
-            &gt;&gt;
+            >>
           </button>
           <button 
             className={`control-btn repeat-btn ${playerState.isRepeating ? 'active' : ''}`}
