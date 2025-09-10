@@ -1,0 +1,336 @@
+{
+    "designSystem": {
+      "metadata": {
+        "name": "Music Player 90s Interface",
+        "theme": "Classic Windows 95/98 Aesthetic",
+        "colorSpace": "sRGB",
+        "accessibilityCompliance": "WCAG 2.1 AA"
+      },
+      
+      "colorPalette": {
+        "systemColors": {
+          "windowBackground": "#FFFFFF",
+          "titleBarActive": "#F8BBD9",
+          "titleBarInactive": "#F0F0F0",
+          "titleBarText": "#FFFFFF",
+          "buttonFace": "#FFFFFF",
+          "buttonHighlight": "#FFFFFF",
+          "buttonShadow": "#E8BBD9",
+          "buttonDarkShadow": "#D8AAC9",
+          "textPrimary": "#2D2D2D",
+          "textSecondary": "#6B6B6B",
+          "selectionBlue": "#F8BBD9",
+          "progressBlue": "#E8BBD9"
+        },
+        "contentColors": {
+          "albumArtBackground": "#F5F5F5",
+          "albumCoverFrame": "#F8BBD9",
+          "playbackBarFill": "#E8BBD9",
+          "playbackBarTrack": "#FFFFFF"
+        }
+      },
+  
+      "componentStyles": {
+        "windowFrame": {
+          "surfaceColor": "#FFFFFF",
+          "borderTreatment": {
+            "outer": "#F8BBD9 2px solid",
+            "inner": "#E8BBD9 1px solid",
+            "corners": "square"
+          },
+          "elevationShadow": "inset 2px 2px 0px #F8BBD9, inset -2px -2px 0px #E8BBD9",
+          "titleBar": {
+            "surfaceColor": "#F8BBD9",
+            "textColor": "#FFFFFF",
+            "fontSize": "11px",
+            "fontFamily": "MS Sans Serif, sans-serif",
+            "fontWeight": "normal",
+            "padding": "2px 4px",
+            "controls": {
+              "backgroundColor": "#FFFFFF",
+              "borderStyle": "raised",
+              "size": "16px x 14px"
+            }
+          }
+        },
+  
+        "menuBar": {
+          "surfaceColor": "#FFFFFF",
+          "textColor": "#2D2D2D",
+          "fontSize": "11px",
+          "fontFamily": "MS Sans Serif, sans-serif",
+          "padding": "4px 8px",
+          "borderBottom": "1px solid #E8BBD9",
+          "menuItems": {
+            "spacing": "8px",
+            "hoverState": {
+              "backgroundColor": "#F8BBD9",
+              "textColor": "#FFFFFF"
+            }
+          }
+        },
+  
+        "albumArtSection": {
+          "container": {
+            "surfaceColor": "#FFFFFF",
+            "padding": "8px",
+            "borderTreatment": "inset 2px solid #E8BBD9"
+          },
+          "albumCover": {
+            "dimensions": "120px x 120px",
+            "borderTreatment": "1px solid #E8BBD9",
+            "backgroundColor": "#F8BBD9",
+            "imageRendering": "pixelated"
+          }
+        },
+  
+        "trackInfoPanel": {
+          "surfaceColor": "#FFFFFF",
+          "padding": "8px 12px",
+          "textElements": {
+            "trackTitle": {
+              "fontSize": "12px",
+              "fontFamily": "MS Sans Serif, sans-serif",
+              "fontWeight": "bold",
+              "color": "#2D2D2D",
+              "textAlign": "center"
+            },
+            "artistName": {
+              "fontSize": "11px",
+              "fontFamily": "MS Sans Serif, sans-serif",
+              "fontWeight": "normal",
+              "color": "#2D2D2D",
+              "textAlign": "center"
+            }
+          }
+        },
+  
+        "progressSection": {
+          "container": {
+            "surfaceColor": "#FFFFFF",
+            "padding": "6px 12px",
+            "borderTop": "1px solid #E8BBD9"
+          },
+          "timeDisplay": {
+            "fontSize": "10px",
+            "fontFamily": "MS Sans Serif, sans-serif",
+            "color": "#2D2D2D",
+            "positioning": "inline-flex justify-between"
+          },
+          "progressBar": {
+            "track": {
+              "backgroundColor": "#FFFFFF",
+              "borderTreatment": "inset 1px solid #E8BBD9",
+              "height": "12px",
+              "borderRadius": "0px"
+            },
+            "fill": {
+              "backgroundColor": "#E8BBD9",
+              "height": "100%",
+              "borderRadius": "0px"
+            },
+            "thumb": {
+              "display": "none"
+            }
+          }
+        },
+  
+        "controlButtons": {
+          "container": {
+            "surfaceColor": "#FFFFFF",
+            "padding": "8px",
+            "display": "flex",
+            "justifyContent": "center",
+            "gap": "4px"
+          },
+          "button": {
+            "baseStyle": {
+              "backgroundColor": "#FFFFFF",
+              "borderTreatment": {
+                "top": "2px solid #F8BBD9",
+                "left": "2px solid #F8BBD9",
+                "right": "2px solid #E8BBD9",
+                "bottom": "2px solid #E8BBD9"
+              },
+              "size": "24px x 20px",
+              "cursor": "pointer"
+            },
+            "interactionStates": {
+              "hover": {
+                "backgroundColor": "#FDF7FB"
+              },
+              "active": {
+                "borderTreatment": {
+                  "top": "2px solid #E8BBD9",
+                  "left": "2px solid #E8BBD9",
+                  "right": "2px solid #F8BBD9",
+                  "bottom": "2px solid #F8BBD9"
+                }
+              },
+              "focus": {
+                "outline": "1px dotted #2D2D2D",
+                "outlineOffset": "2px"
+              }
+            },
+            "iconStyle": {
+              "color": "#2D2D2D",
+              "fontSize": "10px",
+              "fontFamily": "Wingdings, symbol",
+              "textAlign": "center",
+              "lineHeight": "20px"
+            }
+          }
+        },
+  
+        "actionButtons": {
+          "lyricsButton": {
+            "baseStyle": {
+              "backgroundColor": "#FFFFFF",
+              "borderTreatment": {
+                "all": "2px outset #F8BBD9"
+              },
+              "padding": "2px 8px",
+              "fontSize": "11px",
+              "fontFamily": "MS Sans Serif, sans-serif",
+              "color": "#2D2D2D",
+              "minWidth": "60px"
+            },
+            "interactionStates": {
+              "hover": {
+                "backgroundColor": "#FDF7FB"
+              },
+              "active": {
+                "borderTreatment": {
+                  "all": "2px inset #F8BBD9"
+                }
+              }
+            }
+          }
+        }
+      },
+  
+      "layoutSpecifications": {
+        "windowDimensions": {
+          "width": "200px",
+          "minWidth": "180px",
+          "height": "280px",
+          "resizable": true
+        },
+        "componentSpacing": {
+          "sectionGaps": "0px",
+          "contentPadding": "8px",
+          "buttonSpacing": "4px"
+        },
+        "responsiveBehavior": {
+          "minWidth": {
+            "albumArt": "scale-down proportionally",
+            "textElements": "truncate with ellipsis",
+            "controls": "maintain size"
+          }
+        }
+      },
+  
+      "visualEffects": {
+        "beveling": {
+          "raised": {
+            "topLeft": "#FFFFFF",
+            "bottomRight": "#808080",
+            "width": "2px"
+          },
+          "inset": {
+            "topLeft": "#808080",
+            "bottomRight": "#FFFFFF",
+            "width": "2px"
+          }
+        },
+        "shadows": "none",
+        "transitions": "none",
+        "animations": "none"
+      },
+  
+      "typography": {
+        "systemFont": {
+          "fontFamily": "MS Sans Serif, Tahoma, sans-serif",
+          "antialiasing": "none",
+          "rendering": "optimizeSpeed"
+        },
+        "hierarchy": {
+          "windowTitle": {
+            "fontSize": "11px",
+            "fontWeight": "normal",
+            "color": "#FFFFFF"
+          },
+          "menuText": {
+            "fontSize": "11px",
+            "fontWeight": "normal",
+            "color": "#000000"
+          },
+          "trackTitle": {
+            "fontSize": "12px",
+            "fontWeight": "bold",
+            "color": "#000000"
+          },
+          "artistName": {
+            "fontSize": "11px",
+            "fontWeight": "normal",
+            "color": "#000000"
+          },
+          "timeDisplay": {
+            "fontSize": "10px",
+            "fontWeight": "normal",
+            "color": "#000000"
+          },
+          "buttonText": {
+            "fontSize": "11px",
+            "fontWeight": "normal",
+            "color": "#000000"
+          }
+        }
+      },
+  
+      "stateManagement": {
+        "playbackStates": {
+          "playing": {
+            "playButton": "replace with pause icon",
+            "progressBar": "animated fill progression"
+          },
+          "paused": {
+            "playButton": "show play icon",
+            "progressBar": "static fill position"
+          },
+          "stopped": {
+            "playButton": "show play icon",
+            "progressBar": "empty track"
+          }
+        },
+        "windowStates": {
+          "active": {
+            "titleBar": "#0A0A7A",
+            "titleText": "#FFFFFF"
+          },
+          "inactive": {
+            "titleBar": "#808080",
+            "titleText": "#C0C0C0"
+          }
+        }
+      },
+  
+      "implementationNotes": {
+        "criticalDetails": [
+          "All borders must use beveled appearance with highlight/shadow technique",
+          "No anti-aliasing on fonts to maintain authentic 90s appearance",
+          "Button press states invert the bevel direction (outset becomes inset)",
+          "Progress bar uses solid color fill, no gradients or rounded corners",
+          "Window controls follow exact Windows 95/98 specifications",
+          "Album art should maintain aspect ratio and center within frame"
+        ],
+        "accessibilityConsiderations": [
+          "Ensure minimum 4.5:1 contrast ratio between text and background",
+          "Provide keyboard navigation for all interactive elements",
+          "Include focus indicators using dotted outline style",
+          "Alt text for album artwork",
+          "Semantic HTML structure for screen readers"
+        ]
+      }
+    }
+  }

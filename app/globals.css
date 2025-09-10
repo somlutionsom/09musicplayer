@@ -1,0 +1,785 @@
+@import "tailwindcss";
+
+/* 파스텔 핑크 색상 시스템 */
+:root {
+  --background: #FFFFFF;
+  --foreground: #2D2D2D;
+  --card: #F9F9F9;
+  --card-foreground: #2D2D2D;
+  --popover: #FFFFFF;
+  --popover-foreground: #2D2D2D;
+  --primary: #F8BBD9;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F0F0F0;
+  --secondary-foreground: #2D2D2D;
+  --muted: #F0F0F0;
+  --muted-foreground: #6B6B6B;
+  --accent: #F0F0F0;
+  --accent-foreground: #2D2D2D;
+  --destructive: #FF6B6B;
+  --destructive-foreground: #FFFFFF;
+  --border: #E8BBD9;
+  --input: #E8BBD9;
+  --ring: #F8BBD9;
+  --font-sans: var(--font-vt323), sans-serif;
+  --font-serif: serif;
+  --font-mono: var(--font-vt323), monospace;
+  --radius: 0rem;
+  --tracking-normal: 0.05rem;
+  --spacing: 0.25rem;
+
+  /* 기존 색상을 새로운 시스템에 매핑 */
+  --window-background: var(--background);
+  --title-bar-active: var(--primary);
+  --title-bar-inactive: var(--muted);
+  --title-bar-text: var(--primary-foreground);
+  --button-face: var(--background);
+  --button-highlight: var(--background);
+  --button-shadow: var(--border);
+  --button-dark-shadow: var(--muted-foreground);
+  --text-primary: var(--foreground);
+  --text-secondary: var(--muted-foreground);
+  --selection-blue: var(--primary);
+  --progress-blue: var(--primary);
+  
+  /* Content Colors */
+  --album-art-background: var(--card);
+  --album-cover-frame: var(--primary);
+  --playback-bar-fill: var(--primary);
+  --playback-bar-track: var(--background);
+}
+
+.dark {
+  --background: #2D2D2D;
+  --foreground: #F0F0F0;
+  --card: #3D3D3D;
+  --card-foreground: #F0F0F0;
+  --popover: #3D3D3D;
+  --popover-foreground: #F0F0F0;
+  --primary: #F8BBD9;
+  --primary-foreground: #2D2D2D;
+  --secondary: #4D4D4D;
+  --secondary-foreground: #F0F0F0;
+  --muted: #4D4D4D;
+  --muted-foreground: #A0A0A0;
+  --accent: #4D4D4D;
+  --accent-foreground: #F0F0F0;
+  --destructive: #FF6B6B;
+  --destructive-foreground: #2D2D2D;
+  --border: #E8BBD9;
+  --input: #E8BBD9;
+  --ring: #F8BBD9;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
+  --tracking-tight: calc(var(--tracking-normal) - 0.025em);
+  --tracking-normal: var(--tracking-normal);
+  --tracking-wide: calc(var(--tracking-normal) + 0.025em);
+  --tracking-wider: calc(var(--tracking-normal) + 0.05em);
+  --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+}
+
+/* VT323 픽셀 폰트 적용 */
+body {
+  font-family: var(--font-vt323), sans-serif;
+  font-size: 16px; /* VT323 폰트에 맞는 크기 */
+  background: #FFE6F1; /* 파스텔 핑크 배경 */
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-normal);
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 메인 음악 플레이어 윈도우 */
+.music-player-window {
+  width: 200px;
+  min-width: 180px;
+  background: var(--window-background);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+}
+
+/* 윈도우 타이틀 바 */
+.window-title-bar {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 14px;
+  font-weight: normal;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-vt323), sans-serif;
+  border-radius: 8px 8px 0 0;
+}
+
+.window-title-text {
+  font-family: var(--font-vt323), sans-serif;
+  font-size: 14px;
+  color: var(--primary-foreground);
+  font-weight: normal;
+}
+
+.window-title {
+  font-size: 14px;
+  font-weight: normal;
+  font-family: var(--font-vt323), sans-serif;
+}
+
+.window-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.window-control-btn {
+  width: 16px;
+  height: 14px;
+  background: var(--button-face);
+  border: none;
+  font-size: 8px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: var(--primary);
+}
+
+.window-control-btn:hover {
+  background: var(--accent);
+}
+
+.window-control-btn:active {
+  background: var(--primary);
+}
+
+/* 메뉴 바 */
+.menu-bar {
+  background: var(--window-background);
+  color: var(--text-primary);
+  font-size: 14px;
+  padding: 8px;
+  display: flex;
+  gap: 12px;
+  font-family: var(--font-vt323), sans-serif;
+}
+
+.menu-item {
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: var(--title-bar-active);
+  color: var(--title-bar-text);
+}
+
+/* 앨범 아트 섹션 */
+.album-art-section {
+  background: var(--window-background);
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.album-cover {
+  width: 120px;
+  height: 120px;
+  background: var(--primary);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  image-rendering: pixelated;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease-in;
+  position: relative;
+  overflow: hidden;
+}
+
+.album-cover:hover {
+  transform: scale(1.05);
+}
+
+.album-cover:hover::after {
+  content: '📷';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px;
+  border-radius: 50%;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.album-placeholder {
+  font-size: 48px;
+  color: var(--primary-foreground);
+  font-family: "Wingdings", symbol;
+}
+
+/* 트랙 정보 패널 */
+.track-info-panel {
+  background: var(--window-background);
+  padding: 12px;
+  text-align: center;
+  font-family: var(--font-vt323), sans-serif;
+}
+
+.track-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  font-family: var(--font-vt323), sans-serif;
+}
+
+.artist-name {
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--text-primary);
+  font-family: var(--font-vt323), sans-serif;
+}
+
+/* 프로그레스 섹션 */
+.progress-section {
+  background: var(--window-background);
+  padding: 12px;
+  font-family: var(--font-vt323), sans-serif;
+}
+
+.time-display {
+  font-size: 12px;
+  color: var(--text-primary);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-family: var(--font-vt323), sans-serif;
+}
+
+.current-time {
+  color: var(--foreground);
+  font-weight: bold;
+  text-align: left;
+}
+
+.total-time {
+  color: var(--muted-foreground);
+  text-align: right;
+}
+
+.progress-bar {
+  height: 12px;
+}
+
+.progress-track {
+  background: var(--muted);
+  border: none;
+  height: 100%;
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: var(--primary);
+  height: 100%;
+  transition: none;
+  border-radius: 6px;
+}
+
+/* 컨트롤 버튼들 */
+.control-buttons {
+  background: var(--window-background);
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.control-btn {
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--primary-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-family: var(--font-vt323), sans-serif;
+  border-radius: 50%;
+}
+
+.control-btn:hover {
+  background: #E8AAC9;
+}
+
+.control-btn:active {
+  background: #D8AAC9;
+}
+
+.control-btn:focus {
+  outline: 1px dotted var(--text-primary);
+  outline-offset: 2px;
+}
+
+/* 반복 버튼 특별 스타일 */
+.control-btn.repeat-btn {
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid var(--primary);
+  transition: all 0.2s ease;
+}
+
+.control-btn.repeat-btn:hover {
+  background: #E8AAC9;
+  border-color: #E8AAC9;
+}
+
+.control-btn.repeat-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+
+
+/* 반응형 디자인 - 최소 너비에서의 조정 */
+@media (max-width: 240px) {
+  .music-player-window {
+    width: 180px;
+  }
+  
+  .album-cover {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .track-title,
+  .artist-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill {
+    transition: none;
+  }
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: #000000;
+    --button-shadow: #000000;
+  }
+}
+
+/* 추가 접근성 개선 */
+.progress-track:focus {
+  outline: 2px solid var(--selection-blue);
+  outline-offset: 2px;
+}
+
+/* 상태별 스타일 */
+.control-btn.playing {
+  background: var(--selection-blue);
+}
+
+/* 툴팁 스타일 */
+[title] {
+  position: relative;
+}
+
+/* 비주얼 플레이백 인디케이터 */
+.playing-indicator {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--progress-blue);
+  border-radius: 50%;
+  margin-left: 4px;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* 선택 불가능한 텍스트 */
+.window-title,
+.menu-item,
+.control-btn,
+.action-btn {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+/* 더 나은 버튼 포커스 */
+.control-btn:focus-visible,
+.action-btn:focus-visible,
+.window-control-btn:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+/* 모바일 터치 개선 */
+@media (hover: none) and (pointer: coarse) {
+  .control-btn,
+  .action-btn,
+  .window-control-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .menu-item {
+    padding: 8px 4px;
+  }
+}
+
+/* 대형 화면에서의 중앙 정렬 개선 */
+@media (min-width: 768px) {
+  .music-player-window {
+    box-shadow: 
+      inset 2px 2px 0px var(--title-bar-active), 
+      inset -2px -2px 0px var(--button-shadow),
+      0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* 앨범 아트 로딩 상태 */
+.album-cover.loading {
+  background: linear-gradient(
+    90deg,
+    var(--album-cover-frame) 25%,
+    var(--button-highlight) 50%,
+    var(--album-cover-frame) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* 인증 모달 스타일 */
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.auth-modal {
+  background: var(--background);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  font-family: var(--font-vt323), sans-serif;
+}
+
+.auth-modal-header {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px 8px 0 0;
+}
+
+.auth-modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--primary-foreground);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.auth-form {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--foreground);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-vt323), sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+.error-message {
+  background: #ffebee;
+  color: #c62828;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ffcdd2;
+}
+
+.submit-btn {
+  width: 100%;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  padding: 10px;
+  font-family: var(--font-vt323), sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #E8AAC9;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-switch {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.auth-switch p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: var(--font-vt323), sans-serif;
+  font-size: 12px;
+}
+
+.link-btn:hover {
+  color: #E8AAC9;
+}
+
+/* 업로드 버튼 스타일 */
+.upload-buttons {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.upload-btn {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  padding: 6px 12px;
+  font-family: var(--font-vt323), sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.upload-btn:hover {
+  background: #E8AAC9;
+}
+
+/* 플레이리스트 패널 스타일 */
+.playlist-panel {
+  background: var(--background);
+  border-top: 1px solid var(--border);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.playlist-header {
+  background: var(--muted);
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.playlist-header h4 {
+  margin: 0;
+  font-size: 12px;
+  color: var(--foreground);
+  font-weight: normal;
+}
+
+.playlist-content {
+  padding: 8px;
+}
+
+.empty-playlist {
+  text-align: center;
+  padding: 20px;
+  color: var(--muted-foreground);
+}
+
+.empty-playlist p {
+  margin: 4px 0;
+  font-size: 11px;
+}
+
+.song-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.song-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-size: 11px;
+  transition: all 0.2s ease;
+}
+
+.song-item:hover {
+  background: var(--accent);
+  border-color: var(--primary);
+}
+
+.song-item.playing {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: bold;
+}
+
+.song-number {
+  width: 20px;
+  text-align: center;
+  color: var(--muted-foreground);
+  font-size: 10px;
+}
+
+.song-item.playing .song-number {
+  color: var(--primary-foreground);
+}
+
+.song-info {
+  flex: 1;
+  margin: 0 8px;
+  min-width: 0;
+}
+
+.song-title {
+  font-weight: bold;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-artist {
+  color: var(--muted-foreground);
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-item.playing .song-artist {
+  color: var(--primary-foreground);
+  opacity: 0.8;
+}
+
+.song-source {
+  font-size: 12px;
+  opacity: 0.7;
+}
