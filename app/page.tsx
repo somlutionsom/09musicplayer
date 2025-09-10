@@ -48,6 +48,8 @@ export default function Home() {
 
   // YouTube 링크 추가 핸들러
   const handleYouTubeAdd = async (youtubeUrl: string, title: string, artist: string) => {
+    console.log('🎵 YouTube 음악 추가 시도:', { youtubeUrl, title, artist, userId: user?.id });
+    
     if (!user) {
       alert('로그인이 필요합니다.');
       return;
@@ -55,9 +57,10 @@ export default function Home() {
 
     try {
       const { supabase } = await import('./lib/supabase');
+      console.log('📡 Supabase 클라이언트 로드됨');
 
       // 데이터베이스에 YouTube 음악 정보 저장
-      const { error: dbError } = await supabase
+      const { data, error: dbError } = await supabase
         .from('songs')
         .insert({
           user_id: user.id,
@@ -65,13 +68,18 @@ export default function Home() {
           artist: artist || 'Unknown Artist',
           source_type: 'youtube',
           youtube_url: youtubeUrl,
-        });
+        })
+        .select();
+
+      console.log('💾 데이터베이스 저장 결과:', { data, error: dbError });
 
       if (dbError) {
+        console.error('❌ 데이터베이스 저장 실패:', dbError);
         alert('데이터베이스 저장 실패: ' + dbError.message);
         return;
       }
 
+      console.log('✅ YouTube 음악 추가 성공:', data);
       alert('YouTube 음악이 성공적으로 추가되었습니다!');
       setShowYouTubeModal(false);
       // 음악 목록 새로고침
@@ -79,28 +87,38 @@ export default function Home() {
         loadUserSongs();
       }
     } catch (error) {
-      console.error('YouTube 추가 중 오류:', error);
-      alert('YouTube 추가 중 오류가 발생했습니다.');
+      console.error('❌ YouTube 추가 중 오류:', error);
+      alert('YouTube 추가 중 오류가 발생했습니다: ' + (error as Error).message);
     }
   };
 
   // 사용자 음악 목록 로드
   const loadUserSongs = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      console.log('👤 사용자가 로그인하지 않음');
+      return;
+    }
+
+    console.log('🎵 사용자 음악 목록 로드 시작:', user.id);
 
     try {
       const { supabase } = await import('./lib/supabase');
+      console.log('📡 Supabase 클라이언트 로드됨 (음악 목록)');
+      
       const { data, error } = await supabase
         .from('songs')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
+      console.log('📊 음악 목록 조회 결과:', { data, error });
+
       if (error) {
-        console.error('음악 목록 로드 실패:', error);
+        console.error('❌ 음악 목록 로드 실패:', error);
         return;
       }
 
+      console.log('✅ 음악 목록 로드 성공:', data?.length || 0, '개');
       setUserSongs(data || []);
       
       // 앨범 커버 로드
@@ -115,7 +133,7 @@ export default function Home() {
         console.log('🖼️ 앨범 커버 로드됨:', Object.keys(covers).length, '개');
       }
     } catch (error) {
-      console.error('음악 목록 로드 중 오류:', error);
+      console.error('❌ 음악 목록 로드 중 오류:', error);
     }
   }, [user]);
 
