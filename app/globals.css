@@ -793,31 +793,35 @@ body {
 }
 
 .delete-song-btn {
-  background: var(--destructive);
-  color: var(--destructive-foreground);
-  border: 1px solid var(--destructive);
-  border-radius: 2px;
-  width: 16px;
-  height: 16px;
+  background: #ff4444;
+  color: white;
+  border: 1px solid #cc0000;
+  border-radius: 3px;
+  width: 40px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
   font-weight: bold;
   cursor: pointer;
-  margin-left: 4px;
-  opacity: 0.7;
+  margin-left: 8px;
+  opacity: 0.8;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  position: relative;
+  z-index: 10;
 }
 
 .delete-song-btn:hover {
   opacity: 1;
-  background: #ff4444;
-  border-color: #ff4444;
+  background: #ff0000;
+  border-color: #ff0000;
+  transform: scale(1.1);
 }
 
 .delete-song-btn:active {
   background: #cc0000;
   border-color: #cc0000;
+  transform: scale(0.95);
 }

@@ -868,7 +868,7 @@ export default function Home() {
                         }}
                         title="곡 삭제"
                       >
-                        ✕
+                        삭제
                       </button>
                     </div>
                   ))}
