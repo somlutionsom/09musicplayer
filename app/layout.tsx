@@ -39,6 +39,11 @@ export const metadata: Metadata = {
   other: {
     "X-Frame-Options": "SAMEORIGIN",
   },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
 };
 
 export default function RootLayout({
