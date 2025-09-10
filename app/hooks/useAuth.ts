@@ -9,6 +9,43 @@ export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // 사용자 프로필 생성
+  const createUserProfile = useCallback(async (user: User) => {
+    try {
+      console.log('👤 프로필 생성 시작:', user.id);
+      const { error } = await supabase
+        .from('profiles')
+        .insert({
+          id: user.id,
+          username: user.email?.split('@')[0] || 'user',
+          full_name: '',
+        });
+
+      if (error) {
+        console.error('프로필 생성 실패:', error);
+        return;
+      }
+
+      console.log('✅ 프로필 생성 완료');
+
+      // 기본 사용자 설정 생성
+      const { error: settingsError } = await supabase
+        .from('user_settings')
+        .insert({
+          id: user.id,
+        });
+
+      if (settingsError) {
+        console.error('사용자 설정 생성 실패:', settingsError);
+      } else {
+        console.log('✅ 사용자 설정 생성 완료');
+      }
+
+    } catch (error) {
+      console.error('프로필 생성 중 오류:', error);
+    }
+  }, []);
+
   useEffect(() => {
     // 현재 세션 가져오기
     const getSession = async () => {
@@ -56,43 +93,6 @@ export function useAuth() {
 
     return () => subscription.unsubscribe();
   }, [createUserProfile]);
-
-  // 사용자 프로필 생성
-  const createUserProfile = useCallback(async (user: User) => {
-    try {
-      console.log('👤 프로필 생성 시작:', user.id);
-      const { error } = await supabase
-        .from('profiles')
-        .insert({
-          id: user.id,
-          username: user.email?.split('@')[0] || 'user',
-          full_name: '',
-        });
-
-      if (error) {
-        console.error('프로필 생성 실패:', error);
-        return;
-      }
-
-      console.log('✅ 프로필 생성 완료');
-
-      // 기본 사용자 설정 생성
-      const { error: settingsError } = await supabase
-        .from('user_settings')
-        .insert({
-          id: user.id,
-        });
-
-      if (settingsError) {
-        console.error('사용자 설정 생성 실패:', settingsError);
-      } else {
-        console.log('✅ 사용자 설정 생성 완료');
-      }
-
-    } catch (error) {
-      console.error('프로필 생성 중 오류:', error);
-    }
-  }, []);
 
   // 이메일 회원가입
   const signUp = async (email: string, password: string) => {
