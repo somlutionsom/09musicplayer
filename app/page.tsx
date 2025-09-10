@@ -55,27 +55,40 @@ export default function Home() {
       return;
     }
 
-    // 타임아웃 설정 (30초)
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('요청 시간이 초과되었습니다. 다시 시도해주세요.')), 30000);
-    });
-
     try {
-      const operationPromise = (async () => {
       const { supabase } = await import('./lib/supabase');
       console.log('📡 Supabase 클라이언트 로드됨');
 
+      // 현재 사용자 인증 상태 확인
+      const { data: { user: currentUser }, error: authError } = await supabase.auth.getUser();
+      console.log('🔐 현재 사용자 인증 상태:', { currentUser: currentUser?.id, authError });
+
+      if (authError || !currentUser) {
+        console.error('❌ 사용자 인증 실패:', authError);
+        alert('사용자 인증에 실패했습니다. 다시 로그인해주세요.');
+        return;
+      }
+
       // Supabase 연결 상태 확인
       console.log('🔗 Supabase 연결 테스트 시작...');
+      
+      // 먼저 테이블 존재 여부 확인
       const { data: connectionTest, error: connectionError } = await supabase
         .from('songs')
-        .select('*')
+        .select('count')
         .limit(1);
       
       console.log('🔗 Supabase 연결 테스트 결과:', { connectionTest, connectionError });
 
       if (connectionError) {
         console.error('❌ Supabase 연결 실패:', connectionError);
+        
+        // 테이블이 존재하지 않는 경우
+        if (connectionError.code === 'PGRST116' || connectionError.message.includes('relation "songs" does not exist')) {
+          alert('데이터베이스 테이블이 존재하지 않습니다. 관리자에게 문의하세요.');
+          return;
+        }
+        
         alert('데이터베이스 연결에 실패했습니다: ' + connectionError.message);
         return;
       }
@@ -103,17 +116,13 @@ export default function Home() {
         return;
       }
 
-        console.log('✅ YouTube 음악 추가 성공:', data);
-        alert('YouTube 음악이 성공적으로 추가되었습니다!');
-        setShowYouTubeModal(false);
-        // 음악 목록 새로고침
-        if (user) {
-          loadUserSongs();
-        }
-      })();
-
-      // 타임아웃과 작업을 경쟁시킴
-      await Promise.race([operationPromise, timeoutPromise]);
+      console.log('✅ YouTube 음악 추가 성공:', data);
+      alert('YouTube 음악이 성공적으로 추가되었습니다!');
+      setShowYouTubeModal(false);
+      // 음악 목록 새로고침
+      if (user) {
+        loadUserSongs();
+      }
       
     } catch (error) {
       console.error('❌ YouTube 추가 중 오류:', error);
