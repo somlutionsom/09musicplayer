@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 
@@ -12,10 +12,15 @@ export function useAuth() {
   useEffect(() => {
     // 현재 세션 가져오기
     const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+      } catch (error) {
+        console.error('세션 가져오기 실패:', error);
+        setLoading(false);
+      }
     };
 
     getSession();
@@ -23,32 +28,39 @@ export function useAuth() {
     // 인증 상태 변화 감지
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('🔐 인증 상태 변화:', event, session?.user?.id);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
 
         // 새 사용자 등록 시 프로필 생성
         if (event === 'SIGNED_IN' && session?.user) {
-          // 사용자가 새로 등록된 경우에만 프로필 생성
-          const { data: existingProfile } = await supabase
-            .from('profiles')
-            .select('id')
-            .eq('id', session.user.id)
-            .single();
-          
-          if (!existingProfile) {
-            await createUserProfile(session.user);
+          try {
+            // 사용자가 새로 등록된 경우에만 프로필 생성
+            const { data: existingProfile } = await supabase
+              .from('profiles')
+              .select('id')
+              .eq('id', session.user.id)
+              .single();
+            
+            if (!existingProfile) {
+              console.log('👤 새 사용자 프로필 생성 중...');
+              await createUserProfile(session.user);
+            }
+          } catch (error) {
+            console.error('프로필 확인/생성 중 오류:', error);
           }
         }
       }
     );
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [createUserProfile]);
 
   // 사용자 프로필 생성
-  const createUserProfile = async (user: User) => {
+  const createUserProfile = useCallback(async (user: User) => {
     try {
+      console.log('👤 프로필 생성 시작:', user.id);
       const { error } = await supabase
         .from('profiles')
         .insert({
@@ -59,19 +71,28 @@ export function useAuth() {
 
       if (error) {
         console.error('프로필 생성 실패:', error);
+        return;
       }
 
+      console.log('✅ 프로필 생성 완료');
+
       // 기본 사용자 설정 생성
-      await supabase
+      const { error: settingsError } = await supabase
         .from('user_settings')
         .insert({
           id: user.id,
         });
 
+      if (settingsError) {
+        console.error('사용자 설정 생성 실패:', settingsError);
+      } else {
+        console.log('✅ 사용자 설정 생성 완료');
+      }
+
     } catch (error) {
       console.error('프로필 생성 중 오류:', error);
     }
-  };
+  }, []);
 
   // 이메일 회원가입
   const signUp = async (email: string, password: string) => {

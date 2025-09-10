@@ -166,6 +166,45 @@ export default function Home() {
     }
   }, [user]);
 
+  // 곡 삭제 함수
+  const deleteSong = async (songId: string) => {
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
+    if (!confirm('이 곡을 플레이리스트에서 삭제하시겠습니까?')) {
+      return;
+    }
+
+    try {
+      console.log('🗑️ 곡 삭제 시도:', songId);
+      const { supabase } = await import('./lib/supabase');
+      
+      const { error } = await supabase
+        .from('songs')
+        .delete()
+        .eq('id', songId)
+        .eq('user_id', user.id); // 보안: 사용자 본인의 곡만 삭제 가능
+
+      if (error) {
+        console.error('❌ 곡 삭제 실패:', error);
+        alert('곡 삭제에 실패했습니다: ' + error.message);
+        return;
+      }
+
+      console.log('✅ 곡 삭제 성공');
+      alert('곡이 플레이리스트에서 삭제되었습니다.');
+      
+      // 음악 목록 새로고침
+      loadUserSongs();
+      
+    } catch (error) {
+      console.error('❌ 곡 삭제 중 오류:', error);
+      alert('곡 삭제 중 오류가 발생했습니다: ' + (error as Error).message);
+    }
+  };
+
   // 사용자 로그인 시 음악 목록 로드
   useEffect(() => {
     if (user) {
@@ -798,16 +837,30 @@ export default function Home() {
                     <div 
                       key={song.id} 
                       className={`song-item ${playerState.currentTrackIndex === index ? 'playing' : ''}`}
-                      onClick={() => handleSongSelect(song, index)}
                     >
-                      <div className="song-number">{index + 1}</div>
-                      <div className="song-info">
-                        <div className="song-title">{song.title}</div>
-                        <div className="song-artist">{song.artist || 'Unknown Artist'}</div>
+                      <div 
+                        className="song-content"
+                        onClick={() => handleSongSelect(song, index)}
+                      >
+                        <div className="song-number">{index + 1}</div>
+                        <div className="song-info">
+                          <div className="song-title">{song.title}</div>
+                          <div className="song-artist">{song.artist || 'Unknown Artist'}</div>
+                        </div>
+                        <div className="song-source">
+                          {song.source_type === 'youtube' ? '💕' : '📁'}
+                        </div>
                       </div>
-                      <div className="song-source">
-                        {song.source_type === 'youtube' ? '💕' : '📁'}
-                      </div>
+                      <button 
+                        className="delete-song-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteSong(song.id);
+                        }}
+                        title="곡 삭제"
+                      >
+                        ✕
+                      </button>
                     </div>
                   ))}
                 </div>
