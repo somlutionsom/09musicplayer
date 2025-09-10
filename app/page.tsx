@@ -55,11 +55,35 @@ export default function Home() {
       return;
     }
 
+    // 타임아웃 설정 (30초)
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('요청 시간이 초과되었습니다. 다시 시도해주세요.')), 30000);
+    });
+
     try {
+      const operationPromise = (async () => {
       const { supabase } = await import('./lib/supabase');
       console.log('📡 Supabase 클라이언트 로드됨');
 
+      // Supabase 연결 상태 확인
+      console.log('🔗 Supabase 연결 테스트 시작...');
+      const { data: connectionTest, error: connectionError } = await supabase
+        .from('songs')
+        .select('*')
+        .limit(1);
+      
+      console.log('🔗 Supabase 연결 테스트 결과:', { connectionTest, connectionError });
+
+      if (connectionError) {
+        console.error('❌ Supabase 연결 실패:', connectionError);
+        alert('데이터베이스 연결에 실패했습니다: ' + connectionError.message);
+        return;
+      }
+
+      console.log('✅ Supabase 연결 성공');
+
       // 데이터베이스에 YouTube 음악 정보 저장
+      console.log('💾 데이터베이스 저장 시작...');
       const { data, error: dbError } = await supabase
         .from('songs')
         .insert({
@@ -79,13 +103,18 @@ export default function Home() {
         return;
       }
 
-      console.log('✅ YouTube 음악 추가 성공:', data);
-      alert('YouTube 음악이 성공적으로 추가되었습니다!');
-      setShowYouTubeModal(false);
-      // 음악 목록 새로고침
-      if (user) {
-        loadUserSongs();
-      }
+        console.log('✅ YouTube 음악 추가 성공:', data);
+        alert('YouTube 음악이 성공적으로 추가되었습니다!');
+        setShowYouTubeModal(false);
+        // 음악 목록 새로고침
+        if (user) {
+          loadUserSongs();
+        }
+      })();
+
+      // 타임아웃과 작업을 경쟁시킴
+      await Promise.race([operationPromise, timeoutPromise]);
+      
     } catch (error) {
       console.error('❌ YouTube 추가 중 오류:', error);
       alert('YouTube 추가 중 오류가 발생했습니다: ' + (error as Error).message);
