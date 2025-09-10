@@ -126,7 +126,7 @@ export default function Home() {
     } else {
       setUserSongs([]);
     }
-  }, [user, loadUserSongs]);
+  }, [user]);
 
   // YouTube API 초기화
   useEffect(() => {
@@ -531,7 +531,7 @@ export default function Home() {
       console.log('🎵 트랙 변경으로 YouTube 플레이어 업데이트:', playerState.currentTrack.title);
       createYouTubePlayer(playerState.currentTrack.youtubeId);
     }
-  }, [playerState.currentTrack?.id, playerState.currentTrack?.isYoutube, playerState.currentTrack?.youtubeId, createYouTubePlayer]);
+  }, [playerState.currentTrack?.id, playerState.currentTrack?.isYoutube, playerState.currentTrack?.youtubeId]);
 
   // 키보드 단축키 지원
   useEffect(() => {
